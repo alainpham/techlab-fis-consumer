@@ -27,9 +27,7 @@
 			<transform id="calculate">
 				<method method="loopCalc" ref="primeCalculator" />
 			</transform>
-			<sample id="sample-every-sec" samplePeriod="1000">
-				<log id="log-nb" message="${body}" />
-			</sample>
+			<log id="log-nb" message="${body}" />
 		</route>
 	</camelContext>
 </beans>
