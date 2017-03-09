@@ -1,33 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
-	<bean class="org.apache.activemq.ActiveMQConnectionFactory" id="jmsConnectionFactory">
-		<property name="brokerURL" value="failover:(tcp://broker-amq-tcp:61616)" />
-		<property name="userName" value="admin" />
-		<property name="password" value="admin" />
-	</bean>
-	<bean class="org.apache.activemq.pool.PooledConnectionFactory"
-		destroy-method="stop" id="pooledConnectionFactory" init-method="start"
-		primary="true">
-		<property name="maxConnections" value="4" />
-		<property name="connectionFactory" ref="jmsConnectionFactory" />
-	</bean>
-	<bean class="org.apache.camel.component.jms.JmsConfiguration" id="jmsConfig">
-		<property name="connectionFactory" ref="pooledConnectionFactory" />
-		<property name="concurrentConsumers" value="4" />
-	</bean>
-	<bean class="org.apache.activemq.camel.component.ActiveMQComponent"
-		id="activemq">
-		<property name="configuration" ref="jmsConfig" />
-	</bean>
-	<camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
-		<route id="consumer-route">
-			<from id="consumer-route-starter" uri="activemq:queue:events" />
-			<transform id="calculate">
-				<method method="loopCalc" ref="primeCalculator" />
-			</transform>
-			<log id="log-nb" message="${body}" />
-		</route>
-	</camelContext>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <bean class="org.apache.activemq.ActiveMQConnectionFactory" id="jmsConnectionFactory">
+        <property name="brokerURL" value="failover:(tcp://broker-amq-tcp:61616)"/>
+        <property name="userName" value="admin"/>
+        <property name="password" value="admin"/>
+    </bean>
+    <bean class="org.apache.activemq.pool.PooledConnectionFactory"
+        destroy-method="stop" id="pooledConnectionFactory"
+        init-method="start" primary="true">
+        <property name="maxConnections" value="4"/>
+        <property name="connectionFactory" ref="jmsConnectionFactory"/>
+    </bean>
+    <bean class="org.apache.camel.component.jms.JmsConfiguration" id="jmsConfig">
+        <property name="connectionFactory" ref="pooledConnectionFactory"/>
+        <property name="concurrentConsumers" value="4"/>
+    </bean>
+    <bean class="org.apache.activemq.camel.component.ActiveMQComponent" id="activemq">
+        <property name="configuration" ref="jmsConfig"/>
+    </bean>
+    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+        <route id="consumer-route">
+            <from id="consumer-route-starter" uri="activemq:queue:events"/>
+            <transform id="calculate">
+                <method method="loopCalc" ref="primeCalculator"/>
+            </transform>
+            <log id="log-nb" message="${body}"/>
+        </route>
+    </camelContext>
 </beans>

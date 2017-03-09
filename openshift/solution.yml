@@ -36,8 +36,11 @@ parameters:
   description: The application version.
 - name: MAVEN_ARGS
   displayName: Maven Arguments
-  value: package -DMVN_MIRROR=http://172.17.0.1:8081/nexus/content/groups/public/ -gs settings.xml -DskipTests -Dfabric8.skip -e -B
+  value: package -DskipTests -Dfabric8.skip -e -B
   description: Arguments passed to mvn in the build.
+- name: MAVEN_MIRROR_URL
+  displayName: Maven Mirror
+  value: http://172.17.0.1:8081/nexus/content/groups/public/
 - name: MAVEN_ARGS_APPEND
   displayName: Extra Maven Arguments
   description: Extra arguments passed to mvn, e.g. for multi-module builds.
@@ -121,6 +124,8 @@ objects:
           value: "${MAVEN_ARGS_APPEND}"
         - name: MAVEN_OPTS
           value: ${MAVEN_OPTS}
+        - name: MAVEN_MIRROR_URL
+          value: ${MAVEN_MIRROR_URL}
     output:
       to:
         kind: ImageStreamTag
